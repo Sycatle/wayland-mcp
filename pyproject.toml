@@ -32,12 +32,6 @@ classifiers = [
     "Topic :: Desktop Environment",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-urls = { 
-    repository = "https://github.com/kurojs/wayland-mcp",
-    homepage = "https://github.com/kurojs/wayland-mcp",
-    documentation = "https://github.com/kurojs/wayland-mcp#readme",
-    changelog = "https://github.com/kurojs/wayland-mcp/releases"
-}
 dependencies = [
     "requests>=2.31.0",
     "fastmcp>=0.1.0",
@@ -45,13 +39,19 @@ dependencies = [
 ]
 requires-python = ">=3.8"
 
+[project.urls]
+repository = "https://github.com/Sycatle/wayland-mcp"
+homepage = "https://github.com/Sycatle/wayland-mcp"
+documentation = "https://github.com/Sycatle/wayland-mcp#readme"
+changelog = "https://github.com/Sycatle/wayland-mcp/releases"
+
 [project.scripts]
 wayland-mcp = "wayland_mcp.server_mcp:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["wayland_mcp"]
-package-dir = {"" = "wayland_mcp"}
-include-package-data = true
+
+
 
 [build-system]
 requires = ["hatchling"]
