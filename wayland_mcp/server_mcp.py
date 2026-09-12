@@ -360,7 +360,7 @@ register_handler("move_to:", lambda action: _handle_move_to_action(coords_str=ac
 register_handler("drag:", make_handler("drag:", _handle_drag_action))
 register_handler("scroll:", _handle_scroll_action)
 @mcp.tool()
-def execute_action(action: str) -> bool:
+def execute_action(action: str) -> dict:
     """Execute system actions with chaining support.
     Handles both single actions and chained sequences.
     Args:
@@ -379,7 +379,12 @@ def execute_action(action: str) -> bool:
       scroll:horizontal:amount - Horizontal scroll
         Note: Each unit = 1 scroll notch (120 = high-def scroll). Typical: 15-120.
     Returns:
-        bool: True if all actions succeeded, False otherwise
+        dict: {'success': bool, 'error': str}
+
+        Declared as a dict because that is what every code path returns. It was
+        annotated -> bool while returning dicts, and a strict MCP client rejects the
+        structured content against the declared schema, so the tool was unusable
+        from a conforming client.
     Example:
         execute_action("click:100,200")
         execute_action("chain:click:100,200;type:hello;press:Enter")
