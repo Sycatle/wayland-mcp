@@ -86,6 +86,61 @@ def evdev_keycode(char: str) -> Tuple[Optional[int], bool]:
     return (code_for_name(name) if name else None), False
 
 
+#: X11 keysyms for the named keys, used by the portal's keysym path.
+#
+# Keysyms describe *characters and functions*, not positions, so they are immune to
+# the keyboard layout. A keycode-based type_text on an AZERTY layout writes
+# "QSQP 'é" when asked for "ASAP 42"; the keysym path writes what was asked.
+KEYSYMS = {
+    "enter": 0xFF0D, "return": 0xFF0D, "esc": 0xFF1B, "escape": 0xFF1B,
+    "backspace": 0xFF08, "tab": 0xFF09, "space": 0x0020, "delete": 0xFFFF,
+    "insert": 0xFF63, "home": 0xFF50, "end": 0xFF57, "pageup": 0xFF55,
+    "pagedown": 0xFF56, "up": 0xFF52, "down": 0xFF54, "left": 0xFF51,
+    "right": 0xFF53, "capslock": 0xFFE5, "menu": 0xFF67, "print": 0xFF61,
+    "pause": 0xFF13,
+    "shift": 0xFFE1, "ctrl": 0xFFE3, "control": 0xFFE3, "alt": 0xFFE9,
+    "super": 0xFFEB, "meta": 0xFFEB,
+}
+KEYSYMS.update({f"f{n}": 0xFFBE + n - 1 for n in range(1, 13)})
+
+
+def keysym_for_char(char: str):
+    """X11 keysym for a single character, or None.
+
+    Latin-1 characters are their own codepoint; everything else uses the Unicode
+    range X11 reserves for exactly this (0x01000000 + codepoint).
+    """
+    if len(char) != 1:
+        return None
+    codepoint = ord(char)
+    if codepoint in (0x0A, 0x0D):
+        return KEYSYMS["enter"]
+    if codepoint == 0x09:
+        return KEYSYMS["tab"]
+    if 0x20 <= codepoint <= 0xFF:
+        return codepoint
+    return 0x01000000 + codepoint
+
+
+def keysym_for(name: str):
+    """Keysym for a character or a key name such as ``"enter"`` or ``"f5"``."""
+    if len(name) == 1:
+        return keysym_for_char(name)
+    return KEYSYMS.get(name.lower())
+
+
+def parse_keysym_combo(key: str) -> Tuple[List[int], int]:
+    """Split ``"ctrl+shift+a"`` into modifier keysyms and the final keysym."""
+    parts = [part for part in key.split("+") if part] or [key]
+    symbols = []
+    for part in parts:
+        symbol = keysym_for(part if len(part) == 1 else part.lower())
+        if symbol is None:
+            raise ValueError(f"unknown key {part!r} in {key!r}")
+        symbols.append(symbol)
+    return symbols[:-1], symbols[-1]
+
+
 def parse_combo(key: str) -> Tuple[List[int], int]:
     """Split ``"ctrl+shift+a"`` into modifier keycodes and the final keycode.
 
