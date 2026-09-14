@@ -116,7 +116,7 @@ to be prompted every time instead.
 > `scripts/legacy-evemu-setup.sh` documents the exact rollback commands. This fork
 > removed the script from the install path and needs none of it.
 
-## Usage## Usage
+## Usage
 
 ### MCP Configuration
 
