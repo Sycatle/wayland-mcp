@@ -487,7 +487,6 @@ class VLMAgent:
             "X-Title": "Wayland MCP",
             "Content-Type": "application/json",
         }
-        logging.info("Using API key starting with: %s...", self.api_key[:8])
         payload = {
             "model": os.environ.get(
                 "VLM_MODEL", "moonshotai/kimi-vl-a3b-thinking:free"
