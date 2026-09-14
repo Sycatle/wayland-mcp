@@ -274,8 +274,9 @@ from a live run.
   portal backend absorbs that with a zero-distance warm-up motion; without it, the
   first click or keystroke of every session is silently lost.
 - **Absolute pointer positioning through the portal** needs a ScreenCast stream
-  attached to the session. Where the portal refuses one, the backend still moves
-  relatively and says so.
+  attached to the session. Where the portal refuses one, absolute moves raise an
+  explanatory error instead of silently misplacing the cursor; use a relative
+  move, or another input backend.
 
 ### Example Commands
 
