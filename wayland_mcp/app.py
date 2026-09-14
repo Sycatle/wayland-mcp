@@ -14,6 +14,7 @@ back and restored to their real previous values instead of being forced to
 """
 import os
 import subprocess
+import time
 import logging
 import base64
 import requests
