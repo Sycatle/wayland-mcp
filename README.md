@@ -367,3 +367,7 @@ GPL-3.0 License - See [LICENSE](LICENSE) for details.
 <div align="center">
 Made for the Wayland desktop environment
 </div>
+
+---
+
+Built by [Sycode](https://sycode.fr) — freelance SaaS developer.
